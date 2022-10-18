@@ -1,5 +1,11 @@
 const express = require("express");
 const mongoCrudRoter = express.Router();
+const mongoose = require("mongoose");
+const todoSchema = require("../schemas/todoSchema");
+
+
+/** Create Todo mode */
+const Todo = new mongoose.model("Todo",todoSchema); /** 1st paramter model name alawys singular it will create table plular like laravel migration */
 
 /** Get all todos */
 mongoCrudRoter.get('/',async(req,res)=>{
