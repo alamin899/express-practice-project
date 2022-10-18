@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = requ
+var mongoose = require('mongoose')
 
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin')
@@ -15,6 +15,16 @@ var fileUploadRouter = require('./routes/file-upload');
 var mongoCrudRoter = require('./routes/mongoose-crud');
 
 var app = express();
+
+/** Database connection with mongoose */
+mongoose.connect("mongodb://localhost/todos")//here todos is database name eti runtime db create korbe
+ .then(()=>{
+  console.log("mongodb connection succeed");
+ })
+ .catch(err=>{
+  console.log("something went wrong when established mongodb connection");
+ })
+
 
 /** Start express error middleware */
 
