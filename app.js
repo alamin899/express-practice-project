@@ -21,8 +21,8 @@ mongoose.connect("mongodb://localhost/todos")//here todos is database name eti r
  .then(()=>{
   console.log("mongodb connection succeed");
  })
- .catch(err=>{
-  console.log("something went wrong when established mongodb connection");
+ .catch((err)=>{
+  console.log(err);
  })
 
 
@@ -58,7 +58,7 @@ app.use('/middleware',middlewareRouter);
 app.use('/router-tutorial',routerTutorialRouter);
 app.use('/error-handling',errorHandlingRouter);
 app.use('/file-upload',fileUploadRouter);
-app.use('/mongo-crud',mongoCrudRoter);
+app.use('/mongo-crud/todos',mongoCrudRoter);
 /** end router register */
 
 
