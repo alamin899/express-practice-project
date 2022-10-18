@@ -20,7 +20,8 @@ mongoCrudRoter.get('/:todo_id',async(req,res)=>{
 /** Store single todos */
 mongoCrudRoter.post('/',async(req,res)=>{
     const todoModel = new Todo(req.body);
-    await todoModel.save((err)=>{
+    // await Todo.create(req.body,(err)=>{
+    await todoModel.save((err)=>{ 
         if(err){
             res.status(500).json({
                 error:"there was a serverside error"
@@ -34,10 +35,24 @@ mongoCrudRoter.post('/',async(req,res)=>{
     })
 });
 
+
 /** Store multiple todos */
 mongoCrudRoter.post('/multiple',async(req,res)=>{
-
+    // const todoModel = new Todo(req.body); //req.body should be array object
+    await Todo.insertMany(req.body,(err)=>{
+        if(err){
+            res.status(500).json({
+                error:"there was a server side error"
+            });
+        }
+        else{
+            res.status(200).json({
+                message:"multiple todo created successfully"
+            })
+        }
+    })
 });
+
 
 /** Update multiple todos */
 mongoCrudRoter.put('/:todo_id',async(req,res)=>{
