@@ -58,7 +58,7 @@ app.use('/middleware',middlewareRouter);
 app.use('/router-tutorial',routerTutorialRouter);
 app.use('/error-handling',errorHandlingRouter);
 app.use('/file-upload',fileUploadRouter);
-app.use('/mongo-crud/todos',mongoCrudRoter);
+app.use('/mongo-crud',mongoCrudRoter);
 /** end router register */
 
 
