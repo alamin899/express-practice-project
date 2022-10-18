@@ -9,7 +9,7 @@ const todoSchema = mongoose.Schema({
     description:String,
     status:{
         type:String,
-        enum:["active","inactive"]
+        // enum:["active","inactive"]
     },
     created_at:{
         type:Date,

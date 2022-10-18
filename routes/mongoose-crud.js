@@ -25,7 +25,8 @@ mongoCrudRoter.get('/',async(req,res)=>{
     })
 });
 
-/** Get selected todos todos  */
+
+/** Get selected todos data  */
 mongoCrudRoter.get('/specific',async(req,res)=>{
     await Todo.find({status:"active"}).select({  /** eibabe specific data pete pari chining er maddome */
         _id:0,
@@ -90,7 +91,7 @@ mongoCrudRoter.post('/multiple',async(req,res)=>{
 
 
 
-/** Update multiple todos */
+/** Update single todos */
 mongoCrudRoter.put('/:todo_id',async(req,res)=>{
     /** we can use Todo.findByIdAndUpdate() eibabe amra await ke jodi variable a nei tahole update er por data dibe*/
     await Todo.updateOne({
@@ -116,9 +117,27 @@ mongoCrudRoter.put('/:todo_id',async(req,res)=>{
 });
 
 
-/** Update multiple todos */
-mongoCrudRoter.put('/multiple/:todo_id',async(req,res)=>{
 
+/** Update multiple todos by status*/
+mongoCrudRoter.put('/multiple/:status',async(req,res)=>{
+    await Todo.updateMany({
+        status:req.params.status
+    },{
+        $set:{
+            status:"active",
+        }
+    },(err)=>{
+        if(err){
+            res.status(500).json({
+                error:"there was a server side error"
+            });
+        }
+        else{
+            res.status(200).json({
+                message:"Multiple todo updated successfully"
+            })
+        }
+    })
 });
 
 
