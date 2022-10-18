@@ -140,5 +140,23 @@ mongoCrudRoter.put('/multiple/:status',async(req,res)=>{
     })
 });
 
+/** delete todo by status*/
+mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
+    await Todo.deleteOne({
+        _id:req.params.todo_id
+    },(err)=>{
+        if(err){
+            res.status(500).json({
+                error:"There was a server side error"
+            });
+        }
+        else{
+            res.status(200).json({
+                message:"Todo deleted successfully"
+            })
+        }
+    })
+});
+
 
 module.exports = mongoCrudRoter;
