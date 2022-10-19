@@ -10,28 +10,30 @@ const Todo = new mongoose.model("Todo",todoSchema); /** 1st paramter model name,
 
 /** Get all todos  */
 mongoCrudRoter.get('/',async(req,res)=>{
-    await Todo.find({},(err,data)=>{
-        if(err){
-            res.status(500).json({
-                error:"there was a server side error"
-            });
-        }
-        else{
-            res.status(200).json({
-                data:data,
-                message:"Success"
-            })
-        }
-    })
+    /** we can use try catch */
+    try{
+        const data = await Todo.find();
+
+        res.status(200).json({
+            data:data,
+            message:"Success"
+        })
+        
+    }catch(err){
+        res.status(500).json({
+            error:"there was a server side error"
+        });
+    }
+    
 });
 
 
 /** Get selected todos data  */
-mongoCrudRoter.get('/specific',async(req,res)=>{
-    await Todo.find({status:"active"}).select({  /** eibabe specific data pete pari chining er maddome */
+mongoCrudRoter.get('/specific',(req,res)=>{
+    Todo.find({status:"active"}).select({  /** eibabe specific data pete pari chining er maddome */
         _id:0,
         __v:0
-    }).exec((err,data)=>{
+    }).exec((err,data)=>{  /** jehetu ekhane callback sehetu amader async and await use kora lagbe na */
         if(err){
             res.status(500).json({
                 error:"there was a server side error"
@@ -49,7 +51,19 @@ mongoCrudRoter.get('/specific',async(req,res)=>{
 
 /** Find single todos */
 mongoCrudRoter.get('/:todo_id',async(req,res)=>{
+    try{
+        const data = await Todo.find({_id:req.params.todo_id});
 
+        res.status(200).json({
+            data:data,
+            message:"Success"
+        })
+        
+    }catch(err){
+        res.status(500).json({
+            error:"there was a server side error"
+        });
+    }
 });
 
 
