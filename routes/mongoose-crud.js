@@ -191,7 +191,7 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
 
 
    /** custom instance method ,instance method like laravel scope
-    * this is asynchronise way
+    * this is (async & await) way
    */
     mongoInstanceRoter.get('/inactive-data',async(req,res)=>{
         try{
@@ -211,6 +211,25 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
         }
     });
 
+
+    /** this is Callback way */
+    mongoInstanceRoter.get('/active-data',(req,res)=>{
+        const todo = new Todo();
+
+        todo.findActive((err,data)=>{
+            if(err){
+                res.status(500).json({
+                    error:"there was a server side error"
+                });
+            }
+            else{
+                res.status(200).json({
+                    data:data,
+                    message:"Here is all active todo list"
+                })
+            }
+        });
+    });
 
 module.exports = {
     mongoCrudRoter:mongoCrudRoter,

@@ -9,7 +9,7 @@ const todoSchema = mongoose.Schema({
     description:String,
     status:{
         type:String,
-        // enum:["active","inactive"]
+        enum:["active","inactive"]
     },
     created_at:{
         type:Date,
@@ -22,6 +22,9 @@ const todoSchema = mongoose.Schema({
 todoSchema.methods ={
     findInActive:function(){
         return mongoose.model("Todo").find({status:"inactive"});
+    },
+    findActive:function(cb){
+        return mongoose.model("Todo").find({status:"active"},cb);
     }
 }
 
