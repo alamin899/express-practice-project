@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoCrudRoter = express.Router();
 const mongoInstanceRoter = express.Router();
+const mongoStaticRoter = express.Router();
 const mongoose = require("mongoose");
 const todoSchema = require("../schemas/todoSchema");
 
@@ -176,7 +177,8 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
 
 
 
-/**===================================Mongoose Instance method================================================================= */
+/**===================================Start Mongoose Instance method================================================================= */
+
 
 /**============Step of Mongoose method===========
  * 1.create a schema form mongoose.Schema
@@ -206,6 +208,7 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
             
         }catch(err){
             res.status(500).json({
+                allError:err.message,
                 error:"there was a server side error"
             });
         }
@@ -219,6 +222,7 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
         todo.findActive((err,data)=>{
             if(err){
                 res.status(500).json({
+                    allError:err.message,
                     error:"there was a server side error"
                 });
             }
@@ -231,7 +235,28 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
         });
     });
 
+
+
+/**===================================Start Mongoose Static method================================================================= */
+mongoStaticRoter.get('/active-data',async(req,res)=>{
+    try{
+        const data = await Todo.findActiveData();
+
+        res.status(200).json({
+            data:data,
+            message:"Here is all active todo list"
+        })
+        
+    }catch(err){
+        res.status(500).json({
+            allError:err.message,
+            error:"there was a server side error"
+        });
+    }
+});
+
 module.exports = {
     mongoCrudRoter:mongoCrudRoter,
-    mongoInstanceRoter:mongoInstanceRoter
+    mongoInstanceRoter:mongoInstanceRoter,
+    mongoStaticRoter:mongoStaticRoter,
 };
