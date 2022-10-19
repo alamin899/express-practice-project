@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoCrudRoter = express.Router();
+const mongoInstanceRoter = express.Router();
 const mongoose = require("mongoose");
 const todoSchema = require("../schemas/todoSchema");
 
@@ -173,4 +174,27 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
 });
 
 
-module.exports = mongoCrudRoter;
+
+
+/**===================================Mongoose Instance method================================================================= */
+
+/**============Step of Mongoose method===========
+ * 1.create a schema form mongoose.Schema
+ * 2.create a model (which is an another class) form mongoose.model class and pass schema to it
+ * 3.create a document using model class
+ * 4.call necessary model instance method using document
+   const todoSchema = new mongoose.Schema({title:String});
+   const Todo = new mongoose.model('ModelName',todoSchema);
+   const todo = new Todo({title:"this is title"});
+   todo.save() 
+   */
+  
+mongoInstanceRoter.get('/',async(req,res)=>{
+    res.send("this is mongo instance method");
+});
+
+
+module.exports = {
+    mongoCrudRoter:mongoCrudRoter,
+    mongoInstanceRoter:mongoInstanceRoter
+};
