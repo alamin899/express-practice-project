@@ -194,9 +194,11 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
     * this is asynchronise way
    */
     mongoInstanceRoter.get('/inactive-data',async(req,res)=>{
-        const todo = new Todo();
-        const data = await todo.findInActive();
         try{
+            const todo = new Todo();
+
+            const data = await todo.findInActive();
+
             res.status(200).json({
                 data:data,
                 message:"Here is all inactive todo list"
