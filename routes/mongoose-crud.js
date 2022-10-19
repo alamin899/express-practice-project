@@ -188,10 +188,26 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
    const todo = new Todo({title:"this is title"});
    todo.save() 
    */
-  
-mongoInstanceRoter.get('/',async(req,res)=>{
-    res.send("this is mongo instance method");
-});
+
+
+   /** custom instance method ,instance method like laravel scope
+    * this is asynchronise way
+   */
+    mongoInstanceRoter.get('/inactive-data',async(req,res)=>{
+        const todo = new Todo();
+        const data = await todo.findInActive();
+        try{
+            res.status(200).json({
+                data:data,
+                message:"Here is all inactive todo list"
+            })
+            
+        }catch(err){
+            res.status(500).json({
+                error:"there was a server side error"
+            });
+        }
+    });
 
 
 module.exports = {
