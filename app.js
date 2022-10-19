@@ -12,7 +12,7 @@ var middlewareRouter = require('./routes/middleware');
 var routerTutorialRouter = require('./routes/router');
 var errorHandlingRouter = require('./routes/error-handling');
 var fileUploadRouter = require('./routes/file-upload');
-var mongoCrudRoter = require('./routes/mongoose-crud');
+var {mongoCrudRoter,mongoInstanceRoter} = require('./routes/mongoose-crud');
 
 var app = express();
 
@@ -21,8 +21,8 @@ mongoose.connect("mongodb://localhost/todos")//here todos is database name eti r
  .then(()=>{
   console.log("mongodb connection succeed");
  })
- .catch(err=>{
-  console.log("something went wrong when established mongodb connection");
+ .catch((err)=>{
+  console.log(err);
  })
 
 
@@ -59,6 +59,7 @@ app.use('/router-tutorial',routerTutorialRouter);
 app.use('/error-handling',errorHandlingRouter);
 app.use('/file-upload',fileUploadRouter);
 app.use('/mongo-crud',mongoCrudRoter);
+app.use('/mongo-instance-method',mongoInstanceRoter)
 /** end router register */
 
 
