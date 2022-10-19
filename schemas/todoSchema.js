@@ -36,4 +36,11 @@ todoSchema.statics ={
     }
 }
 
+/** mongo static method its like (laravel scope) */
+todoSchema.query ={
+    getDataByStatus:function(status){
+        return this.find({status:status}); //jehetu static ai classer ri instance so this diye amra paye jabo
+    }
+}
+
 module.exports = todoSchema

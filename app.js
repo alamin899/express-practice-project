@@ -12,7 +12,7 @@ var middlewareRouter = require('./routes/middleware');
 var routerTutorialRouter = require('./routes/router');
 var errorHandlingRouter = require('./routes/error-handling');
 var fileUploadRouter = require('./routes/file-upload');
-var {mongoCrudRoter,mongoInstanceRoter,mongoStaticRoter} = require('./routes/mongoose-crud');
+var {mongoCrudRoter,mongoInstanceRoter,mongoStaticRoter,mongoQueryHelperRoter} = require('./routes/mongoose-crud');
 
 var app = express();
 
@@ -59,8 +59,9 @@ app.use('/router-tutorial',routerTutorialRouter);
 app.use('/error-handling',errorHandlingRouter);
 app.use('/file-upload',fileUploadRouter);
 app.use('/mongo-crud',mongoCrudRoter);
-app.use('/mongo-instance-method',mongoInstanceRoter)
-app.use('/mongo-static',mongoStaticRoter)
+app.use('/mongo-instance-method',mongoInstanceRoter);
+app.use('/mongo-static',mongoStaticRoter);
+app.use('/mongo-query-helper',mongoQueryHelperRoter);
 /** end router register */
 
 

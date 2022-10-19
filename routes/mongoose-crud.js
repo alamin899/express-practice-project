@@ -1,8 +1,11 @@
 const express = require("express");
+const mongoose = require("mongoose");
+
 const mongoCrudRoter = express.Router();
 const mongoInstanceRoter = express.Router();
 const mongoStaticRoter = express.Router();
-const mongoose = require("mongoose");
+const mongoQueryHelperRoter = express.Router();
+
 const todoSchema = require("../schemas/todoSchema");
 
 
@@ -238,13 +241,15 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
 
 
 /**===================================Start Mongoose Static method================================================================= */
-mongoStaticRoter.get('/active-data',async(req,res)=>{
+
+/** active data fetch by query helper */
+mongoQueryHelperRoter.get('/active-data',async(req,res)=>{
     try{
-        const data = await Todo.findActiveData();
+        const data = await Todo.find().getDataByStatus("active"); /** query helper amader aibabe chain korte sahajjo kore ,eti static way te call kora jay,we can pass variable data */
 
         res.status(200).json({
             data:data,
-            message:"Here is all active todo list"
+            message:"Here is all active todo list by query helper"
         })
         
     }catch(err){
@@ -255,8 +260,32 @@ mongoStaticRoter.get('/active-data',async(req,res)=>{
     }
 });
 
+
+/** inactive data fetch by query helper */
+mongoQueryHelperRoter.get('/inactive-data',async(req,res)=>{
+    try{
+        const data = await Todo.find().getDataByStatus("inactive"); /** query helper amader aibabe chain korte sahajjo kore ,eti static way te call kora jay,we can pass variable data */
+
+        res.status(200).json({
+            data:data,
+            message:"Here is all inactive todo list by query helper"
+        })
+        
+    }catch(err){
+        res.status(500).json({
+            allError:err.message,
+            error:"there was a server side error"
+        });
+    }
+});
+
+
+/**===================================Start Mongoose Query Helper================================================================= */
+
+
 module.exports = {
     mongoCrudRoter:mongoCrudRoter,
     mongoInstanceRoter:mongoInstanceRoter,
     mongoStaticRoter:mongoStaticRoter,
+    mongoQueryHelperRoter:mongoQueryHelperRoter,
 };
