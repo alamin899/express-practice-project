@@ -19,7 +19,7 @@ const todoSchema = mongoose.Schema({
 });
 
 /** make instance or scope(laravel) */
-mongoose.methods ={
+todoSchema.methods ={
     findInActive:function(){
         return mongoose.model("Todo").find({status:"inactive"});
     }
