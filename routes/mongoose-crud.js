@@ -261,6 +261,9 @@ mongoQueryHelperRoter.get('/active-data',async(req,res)=>{
 });
 
 
+
+/**===================================Start Mongoose Query Helper================================================================= */
+
 /** inactive data fetch by query helper */
 mongoQueryHelperRoter.get('/inactive-data',async(req,res)=>{
     try{
@@ -280,9 +283,7 @@ mongoQueryHelperRoter.get('/inactive-data',async(req,res)=>{
 });
 
 
-/**===================================Start Mongoose Query Helper================================================================= */
-
-
+/**==================================== Export ===================================================================================== */
 module.exports = {
     mongoCrudRoter:mongoCrudRoter,
     mongoInstanceRoter:mongoInstanceRoter,
