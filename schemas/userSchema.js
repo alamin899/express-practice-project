@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema({
     },
     username:{
         type:String,
+        unique:true,
         required:true
     },
     password:{
@@ -15,8 +16,8 @@ const userSchema = mongoose.Schema({
     },
     status:{
         type:Number,
-        enum:[1,0],
-        default:0
+        enum:[0,1,2],
+        default:1
     },
     created_at:{
         type:Date,
