@@ -3,7 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
+var dotenv = require('dotenv');
 
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin')
@@ -26,6 +27,8 @@ mongoose.connect("mongodb://localhost/todos")//here todos is database name eti r
   console.log(err);
  })
 
+ /** This is for env file access */
+ dotenv.config()
 
 /** Start express error middleware */
 

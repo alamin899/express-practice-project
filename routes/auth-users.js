@@ -39,4 +39,41 @@ authRouter.post('/signup',async(req,res)=>{
 });
 
 
+
+/** Login api */
+authRouter.post('/login',async(req,res)=>{
+  try {
+    const user =await User.find({username:req.body.username});
+    console.log(user[0].password);
+    console.log(req.body.password);
+    if(user && user.length>0){
+        const isValidPassword = await bcryptData.compare(req.body.password,user[0].password);
+        console.log(isValidPassword);
+        if(isValidPassword){
+          res.send("you are logged in");
+        }
+        else{
+          res.status(401).json({
+            error:"Incorrect password or username !",
+            success:false
+          });
+        }
+    }
+    else{
+      res.status(401).json({
+        error:"Authentication failed!",
+        success:false
+      });
+    }
+
+  } catch (error) {
+    res.status(500).json({
+      error:error.message,
+      success:false
+    });
+  }
+  
+});
+
+
 module.exports = authRouter
