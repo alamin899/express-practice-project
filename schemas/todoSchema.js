@@ -9,7 +9,7 @@ const todoSchema = mongoose.Schema({
     description:String,
     status:{
         type:String,
-        // enum:["active","inactive"]
+        enum:["active","inactive"]
     },
     created_at:{
         type:Date,
@@ -19,9 +19,27 @@ const todoSchema = mongoose.Schema({
 });
 
 /** make instance or scope(laravel) */
-mongoose.methods ={
+todoSchema.methods ={
     findInActive:function(){
         return mongoose.model("Todo").find({status:"inactive"});
+    },
+    findActive:function(cb){
+        return mongoose.model("Todo").find({status:"active"},cb);
+    }
+}
+
+
+/** mongo static method its like (laravel scope) */
+todoSchema.statics ={
+    findActiveData:function(){
+        return this.find({status:"active"}); //jehetu static ai classer ri instance so this diye amra paye jabo
+    }
+}
+
+/** mongo static method its like (laravel scope) */
+todoSchema.query ={
+    getDataByStatus:function(status){
+        return this.find({status:status}); //jehetu static ai classer ri instance so this diye amra paye jabo
     }
 }
 

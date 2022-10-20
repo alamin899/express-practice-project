@@ -1,7 +1,11 @@
 const express = require("express");
+const mongoose = require("mongoose");
+
 const mongoCrudRoter = express.Router();
 const mongoInstanceRoter = express.Router();
-const mongoose = require("mongoose");
+const mongoStaticRoter = express.Router();
+const mongoQueryHelperRoter = express.Router();
+
 const todoSchema = require("../schemas/todoSchema");
 
 
@@ -176,7 +180,8 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
 
 
 
-/**===================================Mongoose Instance method================================================================= */
+/**===================================Start Mongoose Instance method================================================================= */
+
 
 /**============Step of Mongoose method===========
  * 1.create a schema form mongoose.Schema
@@ -191,7 +196,7 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
 
 
    /** custom instance method ,instance method like laravel scope
-    * this is asynchronise way
+    * this is (async & await) way
    */
     mongoInstanceRoter.get('/inactive-data',async(req,res)=>{
         try{
@@ -206,13 +211,82 @@ mongoCrudRoter.delete('/:todo_id',async(req,res)=>{
             
         }catch(err){
             res.status(500).json({
+                allError:err.message,
                 error:"there was a server side error"
             });
         }
     });
 
 
+    /** this is Callback way */
+    mongoInstanceRoter.get('/active-data',(req,res)=>{
+        const todo = new Todo();
+
+        todo.findActive((err,data)=>{
+            if(err){
+                res.status(500).json({
+                    allError:err.message,
+                    error:"there was a server side error"
+                });
+            }
+            else{
+                res.status(200).json({
+                    data:data,
+                    message:"Here is all active todo list"
+                })
+            }
+        });
+    });
+
+
+
+/**===================================Start Mongoose Static method================================================================= */
+
+/** active data fetch by query helper */
+mongoQueryHelperRoter.get('/active-data',async(req,res)=>{
+    try{
+        const data = await Todo.find().getDataByStatus("active"); /** query helper amader aibabe chain korte sahajjo kore ,eti static way te call kora jay,we can pass variable data */
+
+        res.status(200).json({
+            data:data,
+            message:"Here is all active todo list by query helper"
+        })
+        
+    }catch(err){
+        res.status(500).json({
+            allError:err.message,
+            error:"there was a server side error"
+        });
+    }
+});
+
+
+
+/**===================================Start Mongoose Query Helper================================================================= */
+
+/** inactive data fetch by query helper */
+mongoQueryHelperRoter.get('/inactive-data',async(req,res)=>{
+    try{
+        const data = await Todo.find().getDataByStatus("inactive"); /** query helper amader aibabe chain korte sahajjo kore ,eti static way te call kora jay,we can pass variable data */
+
+        res.status(200).json({
+            data:data,
+            message:"Here is all inactive todo list by query helper"
+        })
+        
+    }catch(err){
+        res.status(500).json({
+            allError:err.message,
+            error:"there was a server side error"
+        });
+    }
+});
+
+
+/**==================================== Export ===================================================================================== */
 module.exports = {
     mongoCrudRoter:mongoCrudRoter,
-    mongoInstanceRoter:mongoInstanceRoter
+    mongoInstanceRoter:mongoInstanceRoter,
+    mongoStaticRoter:mongoStaticRoter,
+    mongoQueryHelperRoter:mongoQueryHelperRoter,
 };

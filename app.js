@@ -3,7 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
+var dotenv = require('dotenv');
 
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin')
@@ -12,7 +13,8 @@ var middlewareRouter = require('./routes/middleware');
 var routerTutorialRouter = require('./routes/router');
 var errorHandlingRouter = require('./routes/error-handling');
 var fileUploadRouter = require('./routes/file-upload');
-var {mongoCrudRoter,mongoInstanceRoter} = require('./routes/mongoose-crud');
+var authRouter = require('./routes/auth-users');
+var {mongoCrudRoter,mongoInstanceRoter,mongoStaticRoter,mongoQueryHelperRoter} = require('./routes/mongoose-crud');
 
 var app = express();
 
@@ -25,6 +27,8 @@ mongoose.connect("mongodb://localhost/todos")//here todos is database name eti r
   console.log(err);
  })
 
+ /** This is for env file access */
+ dotenv.config()
 
 /** Start express error middleware */
 
@@ -59,7 +63,10 @@ app.use('/router-tutorial',routerTutorialRouter);
 app.use('/error-handling',errorHandlingRouter);
 app.use('/file-upload',fileUploadRouter);
 app.use('/mongo-crud',mongoCrudRoter);
-app.use('/mongo-instance-method',mongoInstanceRoter)
+app.use('/mongo-instance-method',mongoInstanceRoter);
+app.use('/mongo-static',mongoStaticRoter);
+app.use('/mongo-query-helper',mongoQueryHelperRoter);
+app.use('/auth',authRouter);
 /** end router register */
 
 
