@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bcryptData = require('bcrypt');
+const checkLogin = require("../middlewares/checkLogin");/** checkLogin Middleware */
 const jwt = require('jsonwebtoken');
 const authRouter = express.Router();
 
@@ -87,5 +88,9 @@ authRouter.post('/login',async(req,res)=>{
   
 });
 
+/** authentication route */
+authRouter.get('/protected-router',checkLogin,(req,res)=>{
+    res.send("This is protected router you are authorized");
+});
 
 module.exports = authRouter
