@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bcryptData = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const authRouter = express.Router();
 
 
@@ -44,15 +45,26 @@ authRouter.post('/signup',async(req,res)=>{
 authRouter.post('/login',async(req,res)=>{
   try {
     const user =await User.find({username:req.body.username});
-    console.log(user[0].password);
-    console.log(req.body.password);
+    
     if(user && user.length>0){
         const isValidPassword = await bcryptData.compare(req.body.password,user[0].password);
-        console.log(isValidPassword);
+        
         if(isValidPassword){
-          res.send("you are logged in");
-        }
-        else{
+          // generate token
+          const token = jwt.sign({
+            username: user[0].username,
+            userId: user[0]._id,
+          },process.env.JWT_SECRET, {
+            expiresIn: '2 days'
+        });
+
+        res.status(200).json({
+          success:true,
+          api_token :token,
+          message:"Login Success",
+        })
+
+        }else{
           res.status(401).json({
             error:"Incorrect password or username !",
             success:false
