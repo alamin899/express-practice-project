@@ -4,6 +4,7 @@ const bcryptData = require('bcrypt');
 const checkLogin = require("../middlewares/checkLogin");/** checkLogin Middleware */
 const jwt = require('jsonwebtoken');
 const authRouter = express.Router();
+const {todoSchema,Todo} = require("../schemas/todoSchema");
 
 
 const userSchema = require("../schemas/userSchema");
@@ -91,6 +92,45 @@ authRouter.post('/login',async(req,res)=>{
 /** authentication route */
 authRouter.get('/protected-router',checkLogin,(req,res)=>{
     res.send("This is protected router you are authorized");
+});
+
+/** Store single todos only authorize user */
+authRouter.post('/todo-store',checkLogin,async(req,res)=>{
+  const todoModel = new Todo({
+    ...req.body,
+    user:req.userId
+  });
+
+  await todoModel.save((err)=>{ 
+      if(err){
+          res.status(500).json({
+              error:"there was a serverside error"
+          });
+      }
+      else{
+          res.status(200).json({
+              message:"todo created successfully"
+          })
+      }
+  })
+});
+
+/** Get all todos authorize user */
+authRouter.get('/todos/:todo_id',checkLogin,async(req,res)=>{
+  try{
+      const data = await Todo.find({_id:req.params.todo_id}).populate("user","name username -_id");//ekhane user hosse todo schemate je user seta ata like reltion of laravel second parameter which field we want to show -_id means ata chai na by default alawys id dey mongo
+
+      res.status(200).json({
+          data:data,
+          message:"Success"
+      })
+      
+  }catch(err){
+      res.status(500).json({
+          error:"there was a server side error"
+      });
+  }
+  
 });
 
 module.exports = authRouter

@@ -14,9 +14,19 @@ const todoSchema = mongoose.Schema({
     created_at:{
         type:Date,
         default:Date.now
+    },
+    user:{  //this is user reletion foreign
+        type:mongoose.Types.ObjectId,
+        ref:"User",
+        required:true
     }
 
 });
+
+/**model create */
+/** Create Todo mode */
+const Todo = new mongoose.model("Todo",todoSchema); /** 1st paramter model name, alawys singular it will create table plular like laravel migration */
+
 
 /** make instance or scope(laravel) */
 todoSchema.methods ={
@@ -43,4 +53,7 @@ todoSchema.query ={
     }
 }
 
-module.exports = todoSchema
+module.exports = {
+    todoSchema:todoSchema,
+    Todo:Todo
+}

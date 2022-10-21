@@ -6,11 +6,11 @@ const mongoInstanceRoter = express.Router();
 const mongoStaticRoter = express.Router();
 const mongoQueryHelperRoter = express.Router();
 
-const todoSchema = require("../schemas/todoSchema");
+const {todoSchema,Todo} = require("../schemas/todoSchema");
 
 
 /** Create Todo mode */
-const Todo = new mongoose.model("Todo",todoSchema); /** 1st paramter model name, alawys singular it will create table plular like laravel migration */
+// const Todo = new mongoose.model("Todo",todoSchema); /** 1st paramter model name, alawys singular it will create table plular like laravel migration */
 
 
 /** Get all todos  */
