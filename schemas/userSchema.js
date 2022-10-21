@@ -22,8 +22,20 @@ const userSchema = mongoose.Schema({
     created_at:{
         type:Date,
         default:Date.now
-    }
+    },
+    todos: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: "Todo"
+        }
+      ]
 
 });
 
-module.exports = userSchema
+/** create User Model */
+const User = mongoose.model("User",userSchema); 
+
+module.exports = {
+    userSchema:userSchema,
+    User:User
+}

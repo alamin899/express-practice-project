@@ -4,14 +4,12 @@ const bcryptData = require('bcrypt');
 const checkLogin = require("../middlewares/checkLogin");/** checkLogin Middleware */
 const jwt = require('jsonwebtoken');
 const authRouter = express.Router();
-const {todoSchema,Todo} = require("../schemas/todoSchema");
-
-
-const userSchema = require("../schemas/userSchema");
+const {Todo} = require("../schemas/todoSchema");
+const {User} = require("../schemas/userSchema");
 
 
 /** Create User model */
-const User = new mongoose.model("User",userSchema); /** 1st paramter model name, alawys singular it will create table plular like laravel migration */
+// const User = new mongoose.model("User",userSchema); /** 1st paramter model name, alawys singular it will create table plular like laravel migration */
 
 /** signup api */
 authRouter.post('/signup',async(req,res)=>{
@@ -96,26 +94,36 @@ authRouter.get('/protected-router',checkLogin,(req,res)=>{
 
 /** Store single todos only authorize user */
 authRouter.post('/todo-store',checkLogin,async(req,res)=>{
+try {
   const todoModel = new Todo({
     ...req.body,
     user:req.userId
   });
 
-  await todoModel.save((err)=>{ 
-      if(err){
-          res.status(500).json({
-              error:"there was a serverside error"
-          });
-      }
-      else{
-          res.status(200).json({
-              message:"todo created successfully"
-          })
-      }
+  const todoStore = await todoModel.save();
+
+  /** when todo store user table a todos id save hobe user has many todos hasmany teltion kora jabe aibabe */
+  await User.updateOne({
+    _id:req.userId
+  },{
+    $push:{
+      todos:todoStore._id
+    }  
   })
+
+  res.status(200).json({
+    message:"todo created successfully"
+})
+} catch (error) {
+  res.status(500).json({
+    error:"there was a serverside error"
+});
+}
+
 });
 
-/** Get all todos authorize user */
+
+/** Get all todos by authorize user */
 authRouter.get('/todos/:todo_id',checkLogin,async(req,res)=>{
   try{
       const data = await Todo.find({_id:req.params.todo_id}).populate("user","name username -_id");//ekhane user hosse todo schemate je user seta ata like reltion of laravel second parameter which field we want to show -_id means ata chai na by default alawys id dey mongo
@@ -127,6 +135,26 @@ authRouter.get('/todos/:todo_id',checkLogin,async(req,res)=>{
       
   }catch(err){
       res.status(500).json({
+          error:"there was a server side error"
+      });
+  }
+  
+});
+
+
+/** Get all users by authorize user */
+authRouter.get('/login-user',checkLogin,async(req,res)=>{
+  try{
+      const user = await User.find({_id:req.userId}).populate("todos","title description -_id");//ekhane todos hosse hasmany reletion
+
+      res.status(200).json({
+          data:user,
+          message:"Success"
+      })
+      
+  }catch(err){
+      res.status(500).json({
+          errorMessage:err.message,
           error:"there was a server side error"
       });
   }
